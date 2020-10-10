@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using AOT;
 using UnityEngine;
@@ -256,4 +256,5 @@ namespace UnityCoreBluetoothFramework
         //--------------------------------------------------------------------------------------------------------------------
     }
 }
+
 #endif
