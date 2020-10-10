@@ -125,25 +125,24 @@ namespace UnityCoreBluetoothFramework
 
         //unityCoreBluetooth_onUpdateValue ----------------------------------------------------------------------------------
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void unityCoreBluetooth_onUpdateValue_delegate(IntPtr peripheral, IntPtr characteristic, IntPtr data, long length);
+        public delegate void unityCoreBluetooth_onUpdateValue_delegate(IntPtr characteristic, IntPtr data, long length);
 
         [DllImport(UnityCoreBluetooth_bundle.IMPORT_TARGET)]
         private static extern void unityCoreBluetooth_onUpdateValue(IntPtr unityCoreBluetooth,
             unityCoreBluetooth_onUpdateValue_delegate handler);
 
-        private static event Action<UnityCBPeripheral, UnityCBCharacteristic, byte[]> onUpdateValueHandler;
+        private static event Action<UnityCBCharacteristic, byte[]> onUpdateValueHandler;
 
         [MonoPInvokeCallback(typeof(unityCoreBluetooth_onUpdateValue_delegate))]
-        private static void onUpdateValueCallback(IntPtr peripheral, IntPtr characteristic, IntPtr data, long length)
+        private static void onUpdateValueCallback(IntPtr characteristic, IntPtr data, long length)
         {
             UnityCBCharacteristic c = new UnityCBCharacteristic(characteristic);
-            UnityCBPeripheral p = new UnityCBPeripheral(peripheral);
             byte[] result = new byte[length];
             Marshal.Copy(data, result, 0, (int)length);
-            UnityCoreBluetooth.onUpdateValueHandler(p, c, result);
+            UnityCoreBluetooth.onUpdateValueHandler(c, result);
         }
 
-        public void OnUpdateValue(Action<UnityCBPeripheral, UnityCBCharacteristic, byte[]> handler)
+        public void OnUpdateValue(Action<UnityCBCharacteristic, byte[]> handler)
         {
             UnityCoreBluetooth.onUpdateValueHandler = handler;
         }
@@ -256,5 +255,4 @@ namespace UnityCoreBluetoothFramework
         //--------------------------------------------------------------------------------------------------------------------
     }
 }
-
 #endif
